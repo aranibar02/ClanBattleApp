@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".viewcontrollers.activities.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="Login"></activity>
     </application>
 
 </manifest>
