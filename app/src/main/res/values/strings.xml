@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ClanBattleApp</string>
+    <string name="title_home">Home</string>
+    <string name="title_sources">sources</string>
 </resources>
