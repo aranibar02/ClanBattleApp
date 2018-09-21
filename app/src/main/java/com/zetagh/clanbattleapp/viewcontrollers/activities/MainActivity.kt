@@ -1,7 +1,8 @@
-package com.zetagh.clanbattleapp
+package com.zetagh.clanbattleapp.viewcontrollers.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.zetagh.clanbattleapp.R
 
 class MainActivity : AppCompatActivity() {
 
