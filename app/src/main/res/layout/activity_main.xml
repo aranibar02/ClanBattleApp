@@ -19,10 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
+        android:theme="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/navigation" />
+        app:itemIconTint="@drawable/btv_tab_item_foreground"
+        app:itemTextColor="@drawable/btv_tab_item_foreground"
+        app:menu="@menu/navigation"/>
 
 </android.support.constraint.ConstraintLayout>
