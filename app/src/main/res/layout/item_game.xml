@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_card_default"
+    android:layout_marginTop="@dimen/margin_card_default"
+    android:layout_marginStart="@dimen/margin_card_default"
+    android:layout_marginEnd="@dimen/margin_card_default">
 
-    <com.androidnetworking.widget.ANImageView
-        android:id="@+id/pictureImageView"
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_margin="@dimen/default_margin"
-        android:layout_height="match_parent"
-        android:src="@mipmap/ic_launcher"/>
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="wrap_content">
+
+        <com.androidnetworking.widget.ANImageView
+            android:id="@+id/pictureImageView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/ratingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="12dp"
+            android:text="Rating of game: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pictureImageView" />
+
+        <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/gameRatingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_marginEnd="16dp"
+            android:numStars="5"
+            android:stepSize=".5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pictureImageView" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.card.MaterialCardView>

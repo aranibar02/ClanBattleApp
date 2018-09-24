@@ -4,7 +4,9 @@ import android.os.Bundle
 
 data class Game( val id:Int,
                  val name:String,
+                 val rating:Int,
                  val description:String,
+                 val urlWebPage:String,
                  val urlToImage:String,
                  val status:String){
     companion object {
@@ -12,7 +14,9 @@ data class Game( val id:Int,
             return Game(
                     bundle.getInt("id"),
                     bundle.getString("name"),
+                    bundle.getInt("rating"),
                     bundle.getString("description"),
+                    bundle.getString("urlWebPage"),
                     bundle.getString("urlToImage"),
                     bundle.getString("status")
             )
@@ -25,7 +29,9 @@ data class Game( val id:Int,
         with(bundle) {
             bundle.putInt("id", id)
             bundle.putString("name", name)
+            bundle.putInt("rating",rating)
             bundle.putString("description", description)
+            bundle.putString("urlWebPage",urlWebPage)
             bundle.putString("urlToImage", urlToImage)
             bundle.putString("status", status)
         }
