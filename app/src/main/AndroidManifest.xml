@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:label="@string/app_name"
-            android:name=".viewcontrollers.activities.MainActivity"
+            android:name=".viewcontrollers.activities.OnboardingActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".viewcontrollers.activities.OnboardingActivity"
+        <activity android:name=".viewcontrollers.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
 
