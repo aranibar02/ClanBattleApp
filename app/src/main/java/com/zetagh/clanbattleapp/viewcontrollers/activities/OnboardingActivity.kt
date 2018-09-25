@@ -27,6 +27,9 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
+        setSupportActionBar(toolbar)
+        toolbar.title = "Selecciona tu comunidad"
+
         gamesAdapter = GameAdapter(games, this)
         gamesLayoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager
         gamesRecyclerView = this.gamesRecyclerViewLayout

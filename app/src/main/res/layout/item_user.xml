@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.androidnetworking.widget.ANImageView
+        android:id="@+id/rankAvatarImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/ic_round_perm_identity_24px"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toTopOf="@id/rankAvatarImage"
+        app:layout_constraintStart_toEndOf="@id/rankAvatarImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="Mock Title text"
+        android:textColor="@color/colorPrimaryText"/>
+
+    <TextView
+        android:id="@+id/UsernameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toEndOf="@id/rankAvatarImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/rankAvatarImage"
+        android:layout_marginTop="8dp"
+        android:text="Username Mock text"
+        android:textColor="@color/colorDisabledText"
+        />
+
+
+
+</android.support.constraint.ConstraintLayout>

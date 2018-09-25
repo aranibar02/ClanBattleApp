@@ -23,13 +23,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item -> return@OnNavigationItemSelectedListener navigateTo(item) }
-
-    private lateinit  var bundle : Bundle
+    private lateinit var bundle:Bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val intent = intent?: return
+        val intent = intent?:return
         bundle = intent.extras
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_home
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun fragmentFor(item: MenuItem): Fragment {
+    private fun fragmentFor(item: MenuItem): Fragment? {
         when(item.itemId){
             R.id.navigation_home -> {
                 toolbar.title = "Home"
@@ -68,22 +69,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateTo(item: MenuItem):Boolean {
-        item.setChecked(true)
-        var fragment:Fragment
-        fragment = fragmentFor(item)
-        Log.d("ClanBattles", "Description Game:" + bundle.getString("description"))
+        item.isChecked = true
+        var fragment:Fragment = fragmentFor(item)!!
         fragment.arguments = bundle
-         return supportFragmentManager
+        return supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.content,fragment)
                 .commit()>0
     }
 
-//    Funcion solo por motivos de test
-    private fun ToastTest(text:String , context:Context){
-        Toast.makeText(context,text,Toast.LENGTH_SHORT).show()
-    }
-
-
 }
-

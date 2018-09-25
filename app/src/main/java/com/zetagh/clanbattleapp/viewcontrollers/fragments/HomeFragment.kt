@@ -15,7 +15,6 @@ import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
 
 import com.zetagh.clanbattleapp.R
-import com.zetagh.clanbattleapp.models.Game
 import com.zetagh.clanbattleapp.models.Publication
 import com.zetagh.clanbattleapp.models.PublicationResponse
 import com.zetagh.clanbattleapp.networking.ClanBattlesApi
