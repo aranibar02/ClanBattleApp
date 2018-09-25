@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.os.Message
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.zetagh.clanbattleapp.R
+import com.zetagh.clanbattleapp.models.Game
+import com.zetagh.clanbattleapp.networking.ClanBattlesApi
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.ChatFragment
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.HomeFragment
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.MapFragment
@@ -21,15 +24,20 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item -> return@OnNavigationItemSelectedListener navigateTo(item) }
 
+    private lateinit  var bundle : Bundle
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val intent = intent?: return
+        bundle = intent.extras
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
         toolbar.title = "Home in case"
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_home
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -37,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun fragmentFor(item: MenuItem): Fragment? {
+    private fun fragmentFor(item: MenuItem): Fragment {
         when(item.itemId){
             R.id.navigation_home -> {
                 toolbar.title = "Home"
@@ -61,9 +69,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateTo(item: MenuItem):Boolean {
         item.setChecked(true)
-        return supportFragmentManager
+        var fragment:Fragment
+        fragment = fragmentFor(item)
+        Log.d("ClanBattles", "Description Game:" + bundle.getString("description"))
+        fragment.arguments = bundle
+         return supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.content,fragmentFor(item))
+                .replace(R.id.content,fragment)
                 .commit()>0
     }
 
@@ -74,3 +86,4 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
