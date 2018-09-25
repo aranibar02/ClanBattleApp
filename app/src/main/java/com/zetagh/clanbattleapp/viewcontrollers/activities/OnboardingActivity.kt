@@ -34,7 +34,7 @@ class OnboardingActivity : AppCompatActivity() {
         gamesRecyclerView.layoutManager  = gamesLayoutManager
 
 
-        AndroidNetworking.get(ClanBattlesApi.getGameUrl)
+        AndroidNetworking.get(ClanBattlesApi.getGamesUrl)
                 .setPriority(Priority.LOW)
                 .setTag(ClanBattlesApi.tag)
                 .build()
