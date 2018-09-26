@@ -37,7 +37,7 @@ class RankFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-        bundle = this.arguments!!
+
         if(arguments != null){
             bundle = this.arguments!!
             game = Game.from(bundle)

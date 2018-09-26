@@ -10,7 +10,8 @@ data class Clan( val id:Int,
                  val win:Int,
                  val lose:Int,
                  val winRate:Double,
-                 val status:String){
+                 val status:String,
+                 val urlToImage:String){
     companion object {
         fun from(bundle:Bundle) : Clan {
             return Clan(
@@ -21,7 +22,8 @@ data class Clan( val id:Int,
                     bundle.getInt("win"),
                     bundle.getInt("lose"),
                     bundle.getDouble("winRate"),
-                    bundle.getString("status")
+                    bundle.getString("status"),
+                    bundle.getString("urlToImage")
             )
         }
     }
@@ -38,6 +40,7 @@ data class Clan( val id:Int,
             bundle.putInt("lose",lose)
             bundle.putDouble("winRate",winRate)
             bundle.putString("status", status)
+            bundle.putString("urlToImage", urlToImage)
         }
         return bundle
     }

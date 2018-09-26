@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zetagh.clanbattleapp.R
 import com.zetagh.clanbattleapp.models.LanCenter
+import kotlinx.android.synthetic.main.item_lancenter.view.*
 
 class LanCenterAdapter(var lanCenters:ArrayList<LanCenter>, val context: Context) : RecyclerView.Adapter<LanCenterAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,9 +27,17 @@ class LanCenterAdapter(var lanCenters:ArrayList<LanCenter>, val context: Context
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        val rankAvatarImage = view.rankAvatarImage
+        val titleTextView = view.titleTextView
+        val usernameTextView = view.usernameTextView
 
         fun updateFrom(lanCenter: LanCenter) {
 
+            titleTextView.text = lanCenter.name
+            usernameTextView.text = lanCenter.name
+            rankAvatarImage.setDefaultImageResId(R.mipmap.ic_launcher)
+            rankAvatarImage.setErrorImageResId(R.mipmap.ic_launcher)
+            rankAvatarImage.setImageUrl(lanCenter.urlToImage)
         }
     }
 }

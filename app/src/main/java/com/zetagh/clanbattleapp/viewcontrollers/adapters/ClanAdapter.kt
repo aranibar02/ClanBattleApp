@@ -11,7 +11,7 @@ import com.zetagh.clanbattleapp.models.Clan
 import com.zetagh.clanbattleapp.models.Game
 import com.zetagh.clanbattleapp.viewcontrollers.activities.ClanActivity
 import com.zetagh.clanbattleapp.viewcontrollers.activities.MainActivity
-import kotlinx.android.synthetic.main.item_clan.view.*
+import kotlinx.android.synthetic.main.item_rank.view.*
 import kotlinx.android.synthetic.main.item_game.view.*
 import java.util.zip.Inflater
 
@@ -19,7 +19,7 @@ class ClanAdapter(var clans:ArrayList<Clan>, val context: Context) : RecyclerVie
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 LayoutInflater.from(context)
-                        .inflate(R.layout.item_clan, parent, false))
+                        .inflate(R.layout.item_rank, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -33,8 +33,18 @@ class ClanAdapter(var clans:ArrayList<Clan>, val context: Context) : RecyclerVie
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+        val rankAvatarImage = view.rankAvatarImage
+        val titleTextView = view.titleTextView
+        val usernameTextView = view.usernameTextView
+
         val clansLayout = view.clansLayout
         fun updateFrom(clan: Clan) {
+
+            titleTextView.text = clan.name
+            usernameTextView.text = clan.name
+            rankAvatarImage.setDefaultImageResId(R.mipmap.ic_launcher)
+            rankAvatarImage.setErrorImageResId(R.mipmap.ic_launcher)
+            rankAvatarImage.setImageUrl(clan.urlToImage)
 
 
             clansLayout.setOnClickListener{view->

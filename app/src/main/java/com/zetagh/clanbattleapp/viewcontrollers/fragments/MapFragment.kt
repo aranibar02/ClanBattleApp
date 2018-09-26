@@ -39,7 +39,7 @@ class MapFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
         lanCenterAdapter = LanCenterAdapter(lanCenters,view.context)
         lanCenterRecyclerView = view.lanCenterRecyclerView
-        lanCenterLayoutManager = LinearLayoutManager(view.context) as RecyclerView.LayoutManager
+        lanCenterLayoutManager = LinearLayoutManager(view.context)
         lanCenterRecyclerView.adapter = lanCenterAdapter
         lanCenterRecyclerView.layoutManager = lanCenterLayoutManager
 
