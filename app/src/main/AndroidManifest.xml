@@ -28,6 +28,7 @@
         <activity
             android:name=".viewcontrollers.activities.ClanActivity"
             android:label="@string/title_activity_clan"
+
             android:parentActivityName=".viewcontrollers.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
