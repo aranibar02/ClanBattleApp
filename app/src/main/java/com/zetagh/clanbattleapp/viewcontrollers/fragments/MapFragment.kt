@@ -1,7 +1,13 @@
 package com.zetagh.clanbattleapp.viewcontrollers.fragments
 
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.location.LocationManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,6 +19,10 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 
 import com.zetagh.clanbattleapp.R
 import com.zetagh.clanbattleapp.models.LanCenter
@@ -33,10 +43,12 @@ class MapFragment : Fragment() {
     private lateinit var lanCenterAdapter: LanCenterAdapter
     private lateinit var lanCenterLayoutManager: RecyclerView.LayoutManager
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.fragment_map, container, false)
+
         lanCenterAdapter = LanCenterAdapter(lanCenters,view.context)
         lanCenterRecyclerView = view.lanCenterRecyclerView
         lanCenterLayoutManager = LinearLayoutManager(view.context)
@@ -62,6 +74,5 @@ class MapFragment : Fragment() {
 
         return view
     }
+    }
 
-
-}
