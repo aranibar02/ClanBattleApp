@@ -1,7 +1,9 @@
 package com.zetagh.clanbattleapp.viewcontrollers.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
@@ -18,7 +21,9 @@ import com.zetagh.clanbattleapp.R
 import com.zetagh.clanbattleapp.models.Publication
 import com.zetagh.clanbattleapp.models.PublicationResponse
 import com.zetagh.clanbattleapp.networking.ClanBattlesApi
+import com.zetagh.clanbattleapp.viewcontrollers.activities.AddPublicationActivity
 import com.zetagh.clanbattleapp.viewcontrollers.adapters.PublicationAdapter
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
@@ -30,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var publicationRecyclerView:RecyclerView
     private lateinit var publicationAdapter:PublicationAdapter
     private lateinit var publicationLayoutManager: RecyclerView.LayoutManager
+    private lateinit var fabButton:FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +45,28 @@ class HomeFragment : Fragment() {
             publication = Publication.from(bundle)
             Log.d("ClanBattles","Name of publication " + publication.id)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val view =  inflater.inflate(R.layout.fragment_home, container, false)
+
+        Log.d(view.toString(), "log")
+
+//        if(view != null){
+//            Log.d(view.toString(),"log")
+//            homeFAB.setOnClickListener {
+//                Log.d(view.toString(),"gg")
+//                val context = view.context
+//                context.startActivity(
+//                        Intent(context,
+//                                AddPublicationActivity::class.java))
+//
+//            }
+//        }
+
         val getPublicationUrl = ClanBattlesApi.getPublicationByGamer(publication.id!!)
         publicationAdapter = PublicationAdapter(publications,view.context)
         publicationLayoutManager = LinearLayoutManager(view.context)
@@ -70,8 +92,8 @@ class HomeFragment : Fragment() {
 
                 })
 
-
         return view
     }
+
 
 }
