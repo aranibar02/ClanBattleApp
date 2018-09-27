@@ -1,78 +1,174 @@
 package com.zetagh.clanbattleapp.viewcontrollers.fragments
 
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.location.LocationManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.ParsedRequestListener
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.Marker
+
 
 import com.zetagh.clanbattleapp.R
-import com.zetagh.clanbattleapp.models.LanCenter
+
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.SupportMapFragment
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.ParsedRequestListener
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import android.location.LocationManager
+import android.content.ContentValues.TAG
+
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
 import com.zetagh.clanbattleapp.models.LanCenterResponse
 import com.zetagh.clanbattleapp.networking.ClanBattlesApi
-import com.zetagh.clanbattleapp.viewcontrollers.adapters.LanCenterAdapter
-import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class MapFragment : Fragment() {
+class MapFragment : Fragment(), OnMapReadyCallback  {
 
-    private var lanCenters = ArrayList<LanCenter>()
-    private lateinit var lanCenterRecyclerView: RecyclerView
-    private lateinit var lanCenterAdapter: LanCenterAdapter
-    private lateinit var lanCenterLayoutManager: RecyclerView.LayoutManager
-
+    private lateinit var mMap: GoogleMap
+    private var latitudes = 0.0
+    private var longitudes = 0.0
+    private val zoom = 15f
+    var locationManager: LocationManager? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
-        lanCenterAdapter = LanCenterAdapter(lanCenters,view.context)
-        lanCenterRecyclerView = view.lanCenterRecyclerView
-        lanCenterLayoutManager = LinearLayoutManager(view.context)
-        lanCenterRecyclerView.adapter = lanCenterAdapter
-        lanCenterRecyclerView.layoutManager = lanCenterLayoutManager
+        val mapFragment = childFragmentManager
+                .findFragmentById(R.id.mapViewFragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        return view
+
+
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+
 
         AndroidNetworking.get(ClanBattlesApi.getLanCentersUrl)
+                /*.addQueryParameter("limit", "3")*/
                 .setPriority(Priority.LOW)
                 .setTag(ClanBattlesApi.tag)
                 .build()
-                .getAsObject(LanCenterResponse::class.java, object :ParsedRequestListener<LanCenterResponse>{
-                    override fun onResponse(response: LanCenterResponse) {
-                        lanCenters = response.lanCenters!!
-                        Log.d(ClanBattlesApi.tag, "Parsed: Found ${lanCenters.size} lanCenters")
-                        lanCenterAdapter.lanCenters = lanCenters
-                        lanCenterAdapter.notifyDataSetChanged()
+                .getAsObject(LanCenterResponse::class.java, object : ParsedRequestListener<LanCenterResponse> {
+                    override fun onResponse(BussinesPoints: LanCenterResponse) {
+
+
+                        pintarBussinesPoints(BussinesPoints)
+                        // Log.e(TAG, "XD")
                     }
 
-                    override fun onError(anError: ANError?) {
-                        Log.d(ClanBattlesApi.tag, anError!!.message)
+                    override fun onError(anError: ANError) {
+                        Log.e(TAG, "error en el api")
+                        // handle error
                     }
                 })
 
-        return view
+
+
+        goToLocationZoom(-12.1038972, -76.9634149, zoom)
     }
+
+
+
+
+    private fun getLocation() {
+
+        try {
+            // Request location updates
+            var location = locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener);
+
+
+        } catch(ex: SecurityException) {
+            Log.d("myTag", "Security Exception, no location available");
+        }
+
+
+
     }
+
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+
+
+            latitudes = location.latitude
+            longitudes = location.longitude
+
+            goToLocationZoom(latitudes,longitudes, zoom)
+        }
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION) {
+            when (grantResults[0]) {
+                PackageManager.PERMISSION_GRANTED -> getLocation()
+                //  PackageManager.PERMISSION_DENIED -> //Tell to user the need of grant permission
+            }
+        }
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 100
+    }
+    private fun goToLocationZoom(lat: Double, lng: Double, zoom: Float) {
+
+        val latLng = LatLng(lat, lng)
+        //  drawMarkerUser(latLng)
+        val update = CameraUpdateFactory.newLatLngZoom(latLng, zoom)
+        mMap.moveCamera(update)
+
+    }
+
+    private fun pintarBussinesPoints(bussinesPoints: LanCenterResponse) {
+
+        for (i in bussinesPoints.lanCenters!!.indices) {
+
+            val point = LatLng(bussinesPoints.lanCenters[i].latitud,
+                    bussinesPoints.lanCenters[i].longitud)
+            Log.d("XD", point.latitude.toString()+ point.longitude.toString())
+            val markerOptions: MarkerOptions
+            markerOptions = MarkerOptions()
+            markerOptions.position(point).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+
+            //   markerOptions.zIndex(bussinesPoints[i].getId_store())
+            // val sydney = LatLng(-34.0, 151.0)
+            // mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+            //  mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+
+            mMap.addMarker(markerOptions)
+        }
+    }
+
+}
+
+
 
