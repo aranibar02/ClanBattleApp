@@ -1,8 +1,8 @@
 package com.zetagh.clanbattleapp.viewcontrollers.activities
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,18 +22,13 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.zetagh.clanbattleapp.R
 import com.zetagh.clanbattleapp.models.Publication
-import com.zetagh.clanbattleapp.networking.ClanBattlesApi.Companion.getPublicationByGamer
 import com.zetagh.clanbattleapp.networking.ClanBattlesApi.Companion.urlPostPublication
 import kotlinx.android.synthetic.main.activity_add_publication.*
 import kotlinx.android.synthetic.main.content_add_publication.*
-import kotlinx.android.synthetic.main.content_add_publication.view.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.net.URL
-import java.sql.Time
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddPublicationActivity : AppCompatActivity() {
@@ -43,10 +38,8 @@ class AddPublicationActivity : AppCompatActivity() {
     private var filePath:Uri?=null
     internal var storage : FirebaseStorage?=null
     internal var storageReference: StorageReference?=null
-
-    lateinit var titleJson : String
-    lateinit var descriptionJson : String
-    var publicationJson:Publication?=null
+    private lateinit var titleJson : String
+    private lateinit var descriptionJson : String
 
     var id:Int?=null
 
@@ -57,16 +50,14 @@ class AddPublicationActivity : AppCompatActivity() {
 
         var intentExtras = intent
         id = intentExtras.getIntExtra("id",1)
+
         //Load image
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
         buttonListenerToGallery()
+
+        //Load image to Firebase
         addPublicationBottonOnClick()
-        postButton()
-
-
-        //Networking POST
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -76,6 +67,8 @@ class AddPublicationActivity : AppCompatActivity() {
             filePath = data!!.data
             try {
 //                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,filePath)
+//                var stream = ByteArrayOutputStream()
+//                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
 //                loadFromGalleryButton.setImageBitmap(bitmap)
                 loadFromGalleryButton.setImageURI(filePath)
                 loadFromGalleryButton.visibility = View.VISIBLE
@@ -95,57 +88,7 @@ class AddPublicationActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImage(){
-        if(filePath!=null){
-
-            val progressDialog = ProgressDialog(this)
-            progressDialog.setTitle("Uploading...")
-            progressDialog.show()
-
-            val ref = storageReference!!.child("images/"+ UUID.randomUUID().toString())
-
-            val uploadTask = ref.putFile(filePath!!)
-                    .addOnSuccessListener {
-                        progressDialog.dismiss()
-                        Toast.makeText(applicationContext,"Uploaded",Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("UploadImage",exception.message)
-                        Toast.makeText(applicationContext,"Failed",Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnProgressListener { taskSnapshot ->
-                        val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
-                        progressDialog.setMessage("Uploaded "+ progress.toInt() +"%...")
-                    }
-            val urlTask = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> {
-                if(!it.isSuccessful){
-                    it.exception?.let {
-                        throw it
-                    }
-                }
-                return@Continuation ref.downloadUrl
-            }).addOnCompleteListener{
-                if(it.isSuccessful){
-                    downloadUri = it.result.toString()
-                }
-            }
-        }
-    }
-
-    private fun addPublicationBottonOnClick(){
-        addPublicationButton.setOnClickListener {
-            uploadImage()
-        }
-    }
-
     private fun initPublication():JSONObject{
-        titleJson = titleEditView.text.toString()
-        descriptionJson = descriptionEditText.text.toString()
-//        publicationJson.urlToImage = downloadUri
-
-        val title= "Titulo insertado para pruebas"
-        val description= "Descripcion insertada para pruebas"
-        val urlToImage = "http://m.memegen.com/jq0ry1.jpg"
 
         var jsonObject = JSONObject()
         jsonObject.put("title",titleEditView.text)
@@ -156,36 +99,78 @@ class AddPublicationActivity : AppCompatActivity() {
 
         return jsonObject
     }
-    private fun postPublication(){
-        //Inicialization of the object created by user
-        val publicationObject = initPublication()
-        val url = urlPostPublication(2)
-        AndroidNetworking.post(url)
-                .addJSONObjectBody(publicationObject)
-                .setTag("Nose")
+
+    private fun uploadImage(){
+        if(filePath!=null){
+
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setTitle("Uploading...")
+            progressDialog.show()
+
+            val ref = storageReference!!.child("images/"+ UUID.randomUUID().toString())
+
+            ref.putFile(filePath!!)
+                    .addOnSuccessListener {
+                        progressDialog.dismiss()
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("UploadImage",exception.message)
+                    }
+                    .addOnProgressListener { taskSnapshot ->
+                        val progress = 100.0 * taskSnapshot.bytesTransferred/taskSnapshot.totalByteCount
+                        progressDialog.setMessage("Uploaded "+ progress.toInt() +"%...")
+                    }
+                    .continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> {
+                        if(!it.isSuccessful){
+                            it.exception?.let {
+                            throw it
+                        }
+                    }
+                    return@Continuation ref.downloadUrl
+                    }).addOnCompleteListener{
+                        if(it.isSuccessful){
+                        downloadUri = it.result.toString()
+                        //Post a publication
+                        postPublication()
+                            backToActivity()
+                    }
+                 }
+            }
+    }
+
+    private fun addPublicationBottonOnClick(){
+        addPublicationButton.setOnClickListener {
+            uploadImage()
+        }
+    }
+
+
+    private fun postPublication(gamerid:Int = 2){
+
+        val json = initPublication()
+        Log.d("postpublication","Este es el json ${json}")
+        Log.d("postpublication","URL de descarga ${downloadUri}")
+
+        AndroidNetworking.post(urlPostPublication(gamerid))
+                .addJSONObjectBody(json)
                 .setPriority(Priority.MEDIUM)
                 .build()
-                .getAsJSONArray(object : JSONArrayRequestListener{
-                    override fun onResponse(response: JSONArray?) {
-                        Toast.makeText(applicationContext,"Funko",Toast.LENGTH_SHORT)
-                        Log.d("postPublication",response.toString())
-                        Log.d("postPublication",downloadUri)
+                .getAsJSONObject(object : JSONObjectRequestListener{
+                    override fun onResponse(response: JSONObject?) {
+                        Log.d("postPublication","On response exitoso -> ${response.toString()}")
                     }
 
                     override fun onError(anError: ANError?) {
-                        Toast.makeText(applicationContext,"Errorr",Toast.LENGTH_SHORT)
-                        Log.d("postPublication",anError.toString())
-                        Log.d("postPublication",downloadUri)
+                        Log.d("postPublication","Error failure -> ${anError.toString()}")
                     }
 
                 })
     }
-
-    private fun postButton(){
-        postPublication.setOnClickListener {
-            Toast.makeText(this,"Button Pressed",Toast.LENGTH_SHORT)
-            postPublication()
-        }
+    private fun backToActivity(){
+        val context = applicationContext
+        context.startActivity(
+                Intent(context,MainActivity::class.java)
+        )
     }
 }
 

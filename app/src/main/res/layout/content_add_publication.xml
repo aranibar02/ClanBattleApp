@@ -25,7 +25,6 @@
         android:hint="Insert a title "
         android:inputType="textPersonName"
         android:padding="4dp"
-        android:text="Title"
         android:textColorHint="@color/colorDisabledText"
         app:layout_constraintBottom_toTopOf="@+id/descriptionEditText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +49,6 @@
         android:isScrollContainer="false"
         android:padding="4dp"
         android:singleLine="false"
-        android:text="Description"
         android:textAlignment="viewStart"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorDisabledText"
@@ -61,13 +59,30 @@
 
     <android.support.design.button.MaterialButton
         android:id="@+id/chooseImage"
-        android:layout_width="wrap_content"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Choose an image"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/takePhotoImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionEditText" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/takePhotoImage"
+        android:layout_width="148dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:layout_marginStart="8dp"
-        android:text="Choose an image here..."
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:drawableLeft="@drawable/ic_image_black_24dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Take a photo"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/chooseImage"
         app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
     <ImageView
@@ -75,40 +90,33 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="16dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/ic_image_black_24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:background="@color/colorCards"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chooseImage"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_image_black_24dp"
         android:visibility="gone"
-        android:scaleType="fitXY"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseImage" />
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/addPublicationButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:background="@color/colorAccent"
         android:elevation="4dp"
-        android:text="POST IMAGE 1"
-        app:layout_constraintEnd_toStartOf="@+id/postPublication"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loadFromGalleryButton" />
-
-    <Button
-        android:id="@+id/postPublication"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorAccent"
-        android:elevation="4dp"
-        android:text="Post publication for real 2"
+        android:focusable="auto"
+        android:paddingTop="8dp"
+        android:text="ADD PUBLICATION"
+        android:textAlignment="center"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addPublicationButton"
-        app:layout_constraintTop_toBottomOf="@+id/chooseImage" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
