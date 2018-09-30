@@ -2,10 +2,12 @@ package com.zetagh.clanbattleapp.networking
 
 class ClanBattlesApi {
     companion object {
-        private val baseUrl = "http://clanbattles.somee.com/clanbattles/"
-        val getGameUrl = "$baseUrl/v1/games/"
+        private val baseUrl = "http://clanbattles.somee.com/clanbattles"
+        val getGameUrl = "$baseUrl/v1/games"
         val getLanCentersUrl = "$baseUrl/v1/lancenters"
-        fun getPublicationByGamer(gameId:Int):String{return "$getGameUrl/$gameId/publications"}
+        val getGamersUrl = "$baseUrl/v1/gamers"
+        fun getPublicationByGamer(gamerId:Int):String{return "$getGameUrl/$gamerId/publications"}
+        fun urlPostPublication(gamerId:Int):String{return "$getGamersUrl/$gamerId/publications"}
         fun getClanUrl(gameId: Int): String {return "$getGameUrl/$gameId/clans"}
         val tag = "ClanBattles"
     }

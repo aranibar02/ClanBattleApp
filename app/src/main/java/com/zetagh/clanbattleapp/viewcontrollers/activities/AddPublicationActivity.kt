@@ -23,6 +23,7 @@ import com.google.firebase.storage.UploadTask
 import com.zetagh.clanbattleapp.R
 import com.zetagh.clanbattleapp.models.Publication
 import com.zetagh.clanbattleapp.networking.ClanBattlesApi.Companion.getPublicationByGamer
+import com.zetagh.clanbattleapp.networking.ClanBattlesApi.Companion.urlPostPublication
 import kotlinx.android.synthetic.main.activity_add_publication.*
 import kotlinx.android.synthetic.main.content_add_publication.*
 import kotlinx.android.synthetic.main.content_add_publication.view.*
@@ -30,6 +31,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
+import java.sql.Time
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddPublicationActivity : AppCompatActivity() {
@@ -137,8 +141,6 @@ class AddPublicationActivity : AppCompatActivity() {
     private fun initPublication():JSONObject{
         titleJson = titleEditView.text.toString()
         descriptionJson = descriptionEditText.text.toString()
-//        publicationJson.title = titleJson
-//        publicationJson.description= descriptionJson
 //        publicationJson.urlToImage = downloadUri
 
         val title= "Titulo insertado para pruebas"
@@ -146,25 +148,18 @@ class AddPublicationActivity : AppCompatActivity() {
         val urlToImage = "http://m.memegen.com/jq0ry1.jpg"
 
         var jsonObject = JSONObject()
-        jsonObject.put("id",66)
-        jsonObject.put("title",title)
-        jsonObject.put("description",description)
-        jsonObject.put("urlToImage",urlToImage)
+        jsonObject.put("title",titleEditView.text)
+        jsonObject.put("description",descriptionEditText.text)
+        jsonObject.put("urlToImage",downloadUri)
         jsonObject.put("publicationDate","2018-09-29T16:04:20.4070326-07:00")
-        jsonObject.put("status","ACT")
-        jsonObject.put("gamerId",2)
-        jsonObject.put("gameId",2)
-
-
+        jsonObject.put("gameId",id)
 
         return jsonObject
     }
     private fun postPublication(){
         //Inicialization of the object created by user
         val publicationObject = initPublication()
-//        AndroidNetworking.post(getPublicationByGamer(id!!))
-//        AndroidNetworking.post(getPublicationByGamer(1))
-        val url = "http://clanbattles.somee.com/clanbattles/v1/gamers/2/publications"
+        val url = urlPostPublication(2)
         AndroidNetworking.post(url)
                 .addJSONObjectBody(publicationObject)
                 .setTag("Nose")
@@ -174,15 +169,13 @@ class AddPublicationActivity : AppCompatActivity() {
                     override fun onResponse(response: JSONArray?) {
                         Toast.makeText(applicationContext,"Funko",Toast.LENGTH_SHORT)
                         Log.d("postPublication",response.toString())
-                        System.out.println("AQUI SE DA EL SUCCESS")
+                        Log.d("postPublication",downloadUri)
                     }
 
                     override fun onError(anError: ANError?) {
                         Toast.makeText(applicationContext,"Errorr",Toast.LENGTH_SHORT)
                         Log.d("postPublication",anError.toString())
-                        System.out.println("AQUI SE DA EL ERROR")
-                        System.out.println(publicationObject)
-
+                        Log.d("postPublication",downloadUri)
                     }
 
                 })
@@ -190,7 +183,7 @@ class AddPublicationActivity : AppCompatActivity() {
 
     private fun postButton(){
         postPublication.setOnClickListener {
-            Toast.makeText(applicationContext,"Button Pressed",Toast.LENGTH_SHORT)
+            Toast.makeText(this,"Button Pressed",Toast.LENGTH_SHORT)
             postPublication()
         }
     }
