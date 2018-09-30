@@ -3,14 +3,14 @@ package com.zetagh.clanbattleapp.models
 import android.os.Bundle
 
 data class Publication(
-    val id:Int? = null,
-    val gamerId:Int? = null,
-    val gameId:Int? = null,
-    val title:String? = null,
-    val description:String? = null,
-    val urlToImage:String? = null ,
-    val publicationDate:String? = null,
-    val status:String? = null
+        var id:Int? = null,
+        var gamerId:Int? = null,
+        var gameId:Int? = null,
+        var title:String? = null,
+        var description:String? = null,
+        var urlToImage:String? = null ,
+        var publicationDate:String? = null,
+        var status:String? = null
 ){
     companion object {
         fun from(bundle: Bundle):Publication {

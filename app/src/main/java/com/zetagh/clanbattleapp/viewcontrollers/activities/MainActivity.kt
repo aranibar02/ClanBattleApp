@@ -1,23 +1,21 @@
 package com.zetagh.clanbattleapp.viewcontrollers.activities
 
-import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import android.view.View
 import com.zetagh.clanbattleapp.R
-import com.zetagh.clanbattleapp.models.Game
-import com.zetagh.clanbattleapp.networking.ClanBattlesApi
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.ChatFragment
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.HomeFragment
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.MapFragment
 import com.zetagh.clanbattleapp.viewcontrollers.fragments.RankFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,7 +37,10 @@ class MainActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_home
 
+        //Funcion definida en la parte inferior
+        setOnListenerFloatingActionButton()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.navigation_toolbar,menu)
@@ -50,18 +51,22 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.navigation_home -> {
                 toolbar.title = "Home"
+                mainFloatingActionButton.visibility = View.VISIBLE
                 return HomeFragment()
             }
             R.id.navigation_sources -> {
                 toolbar.title = "Map"
+                mainFloatingActionButton.visibility = View.GONE
                 return MapFragment()
             }
             R.id.navigation_ranking -> {
                 toolbar.title = "Groups"
+                mainFloatingActionButton.visibility = View.GONE
                 return RankFragment()
             }
             R.id.navigation_favorites -> {
                 toolbar.title = "Message"
+                mainFloatingActionButton.visibility = View.GONE
                 return ChatFragment()
             }
         }
@@ -76,6 +81,16 @@ class MainActivity : AppCompatActivity() {
                 .beginTransaction()
                 .replace(R.id.content,fragment)
                 .commit()>0
+    }
+
+    //SetonClickListener del mainFloatingActionButton
+    private fun setOnListenerFloatingActionButton() {
+        mainFloatingActionButton.setOnClickListener {
+            val context = it.context
+            context.startActivity(
+                    Intent(context,AddPublicationActivity::class.java).putExtras(bundle)
+            )
+        }
     }
 
 }

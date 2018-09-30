@@ -35,7 +35,6 @@ class HomeFragment : Fragment() {
     private lateinit var publicationRecyclerView:RecyclerView
     private lateinit var publicationAdapter:PublicationAdapter
     private lateinit var publicationLayoutManager: RecyclerView.LayoutManager
-    private lateinit var fabButton:FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,20 +51,6 @@ class HomeFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val view =  inflater.inflate(R.layout.fragment_home, container, false)
-
-        Log.d(view.toString(), "log")
-
-//        if(view != null){
-//            Log.d(view.toString(),"log")
-//            homeFAB.setOnClickListener {
-//                Log.d(view.toString(),"gg")
-//                val context = view.context
-//                context.startActivity(
-//                        Intent(context,
-//                                AddPublicationActivity::class.java))
-//
-//            }
-//        }
 
         val getPublicationUrl = ClanBattlesApi.getPublicationByGamer(publication.id!!)
         publicationAdapter = PublicationAdapter(publications,view.context)

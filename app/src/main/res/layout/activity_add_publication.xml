@@ -26,3 +26,6 @@
     <include layout="@layout/content_add_publication" />
 
 </android.support.design.widget.CoordinatorLayout>
+
+
+

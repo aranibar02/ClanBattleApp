@@ -97,7 +97,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_image_white_24dp" />
+                            <entry key="outputName" value="ic_image_black_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Jose Veliz\Downloads\round-perm_identity-24px.svg" />
                           </map>

@@ -38,7 +38,18 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/mainFloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_black_24dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="24dp"
+                android:visibility="visible"/>
+
+        </FrameLayout>
 
         <android.support.design.widget.BottomNavigationView
             android:elevation="4dp"
