@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Write a new post in our comunity:"
+            app:title="New post"
             app:titleTextColor="@color/colorPrimaryText"
             android:theme="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
             app:logo="@drawable/my_logo"/>

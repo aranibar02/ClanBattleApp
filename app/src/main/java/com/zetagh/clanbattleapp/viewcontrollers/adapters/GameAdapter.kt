@@ -31,7 +31,6 @@ class GameAdapter(var games:ArrayList<Game>, val context: Context) : RecyclerVie
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val pictureImageView = view.pictureImageView
-//        val gameRating = view.gameRatingBar
         val gameLayout = view.gameLayout
         fun updateFrom(game: Game) {
             with(pictureImageView) {
@@ -39,7 +38,6 @@ class GameAdapter(var games:ArrayList<Game>, val context: Context) : RecyclerVie
                 pictureImageView.setErrorImageResId(R.mipmap.ic_launcher)
                 pictureImageView.setImageUrl(game.urlToImage)
 
-//                gameRating.rating = game.rating.toFloat()
             }
             gameLayout.setOnClickListener { view ->
                 val context = view.context

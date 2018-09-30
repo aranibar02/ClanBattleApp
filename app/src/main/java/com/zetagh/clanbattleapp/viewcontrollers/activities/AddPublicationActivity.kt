@@ -1,10 +1,13 @@
 package com.zetagh.clanbattleapp.viewcontrollers.activities
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.DrmInitData
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -28,7 +31,9 @@ import kotlinx.android.synthetic.main.content_add_publication.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPublicationActivity : AppCompatActivity() {
@@ -36,11 +41,14 @@ class AddPublicationActivity : AppCompatActivity() {
     var downloadUri :String?=null
     private val PICK_IMAGE_REQUEST = 1234
     private var filePath:Uri?=null
+    private var bitmap:Bitmap?=null
     internal var storage : FirebaseStorage?=null
     internal var storageReference: StorageReference?=null
-    private lateinit var titleJson : String
-    private lateinit var descriptionJson : String
-
+    private var dataByte:ByteArray?=null
+    private var CAMERA_REQUEST_CODE = 1
+    private var GALLERY_REQUEST  = 1
+    private var mCurrentPhotoPath:String?=null
+    private var photoFile:File?=null
     var id:Int?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +63,7 @@ class AddPublicationActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
         buttonListenerToGallery()
+        cameraButtonListener()
 
         //Load image to Firebase
         addPublicationBottonOnClick()
@@ -63,23 +72,52 @@ class AddPublicationActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+
         if(requestCode == PICK_IMAGE_REQUEST &&  resultCode == RESULT_OK && data!= null && data.data !=null){
+            Log.d("photo","Entro a ")
             filePath = data!!.data
             try {
-//                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,filePath)
-//                var stream = ByteArrayOutputStream()
-//                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
-//                loadFromGalleryButton.setImageBitmap(bitmap)
-                loadFromGalleryButton.setImageURI(filePath)
+                bitmap = MediaStore.Images.Media.getBitmap(contentResolver,filePath)
+                var stream = ByteArrayOutputStream()
+                bitmap!!.compress(Bitmap.CompressFormat.JPEG,25,stream)
+                dataByte= stream.toByteArray()
+                loadFromGalleryButton.setImageBitmap(bitmap)
+//                loadFromGalleryButton.setImageURI(filePath)
                 loadFromGalleryButton.visibility = View.VISIBLE
             }catch (e:IOException){
                 e.printStackTrace()
             }
         }
+        if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+                Log.d("photo","Entro a5 ")
+
+            try {
+                Log.d("photo","Entro a3 ")
+                bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(mCurrentPhotoPath))
+                loadFromGalleryButton.setImageBitmap(bitmap)
+                loadFromGalleryButton.visibility = View.VISIBLE
+            }catch (e:IOException){
+                Log.d("photo",e.printStackTrace().toString())
+            }
+
+        }
 
     }
 
-    private fun buttonListenerToGallery() {
+    private fun createImageFile() {
+    var timeStamp:String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    var imageFileName:String = "JPEG_" + timeStamp + "_"
+    var storageDir:File = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_PICTURES)
+    photoFile = File.createTempFile(
+            imageFileName,  // prefix
+            ".jpg",         // suffix
+            storageDir      // directory
+    )
+    mCurrentPhotoPath = "file:" + photoFile!!.absolutePath
+}
+
+        private fun buttonListenerToGallery() {
         chooseImage.setOnClickListener{
             var i = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             i.type = "image/*"
@@ -108,8 +146,8 @@ class AddPublicationActivity : AppCompatActivity() {
             progressDialog.show()
 
             val ref = storageReference!!.child("images/"+ UUID.randomUUID().toString())
-
-            ref.putFile(filePath!!)
+            val uploadTask = ref.putBytes(dataByte!!)
+            uploadTask
                     .addOnSuccessListener {
                         progressDialog.dismiss()
                     }
@@ -171,6 +209,32 @@ class AddPublicationActivity : AppCompatActivity() {
         context.startActivity(
                 Intent(context,MainActivity::class.java)
         )
+    }
+    private fun cameraButtonListener(){
+
+//        takePhotoImage.setOnClickListener{
+//            var intent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//
+////            createImageFile()
+//                Log.d("photo","photoFile -> $photoFile")
+//                Log.d("photo","photoFilePath -> $mCurrentPhotoPath")
+//
+//            if(intent.resolveActivity(packageManager)!=null){
+//
+//                Log.d("photo","eNTRE")
+////                try {
+////                    photoFile = createImageFile()
+////                    Log.d("photo","photoFilePath -> $mCurrentPhotoPath")
+////                    Log.d("photo","photoFile -> $photoFile")
+////                }catch (e:IOException){
+////                    Log.d("photo","Catch error -> ${e.printStackTrace()}")
+////                }
+//                if(photoFile!=null){
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile))
+//                    startActivityForResult(intent,CAMERA_REQUEST_CODE)
+//                }
+//            }
+//        }
     }
 }
 
