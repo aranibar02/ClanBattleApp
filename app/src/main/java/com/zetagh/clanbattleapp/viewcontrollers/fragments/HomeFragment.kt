@@ -66,6 +66,7 @@ class HomeFragment : Fragment() {
                 .getAsObject(PublicationResponse::class.java,object :ParsedRequestListener<PublicationResponse>{
                     override fun onResponse(response: PublicationResponse) {
                         publications = response.publications!!
+                        publications.reverse()
                         publicationAdapter.publications = publications
                         publicationAdapter.notifyDataSetChanged()
                         Log.d("ClanBattles","Objeto 'publication'$publications")
