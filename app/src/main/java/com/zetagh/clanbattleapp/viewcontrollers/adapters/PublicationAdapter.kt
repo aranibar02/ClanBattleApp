@@ -20,7 +20,7 @@ class PublicationAdapter(var publications:ArrayList<Publication>,val context:Con
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val publication = publications.get(position)
+        val publication = publications[position]
         holder.updateFrom(publication)
     }
 
@@ -40,10 +40,12 @@ class PublicationAdapter(var publications:ArrayList<Publication>,val context:Con
             avatarImage.setDefaultImageResId(R.mipmap.ic_launcher)
             avatarImage.setErrorImageResId(R.mipmap.ic_launcher)
             avatarImage.setImageUrl(publication.urlToImage)
+//            avatarImage.clipToOutline = true
 
             descriptionImageView.setDefaultImageResId(R.mipmap.ic_launcher)
             descriptionImageView.setErrorImageResId(R.mipmap.ic_launcher)
             descriptionImageView.setImageUrl(publication.urlToImage)
+            descriptionImageView.clipToOutline = true
         }
 
     }

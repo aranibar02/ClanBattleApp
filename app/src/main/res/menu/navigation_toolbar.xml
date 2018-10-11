@@ -3,13 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_account"
         android:orderInCategory="300"
         android:title="@string/settings"
-        android:icon="@drawable/ic_outline_settings_24px"
+        android:icon="@drawable/ic_person_outline_black_24dp"
         app:showAsAction="ifRoom"/>
+
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:orderInCategory="300"-->
+        <!--android:title="@string/settings"-->
+        <!--android:icon="@drawable/ic_outline_settings_24px"-->
+        <!--app:showAsAction="ifRoom"/>-->
 
     <item
         android:id="@+id/action_search"

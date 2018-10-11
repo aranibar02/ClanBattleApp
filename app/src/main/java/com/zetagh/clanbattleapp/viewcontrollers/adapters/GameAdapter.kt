@@ -37,6 +37,7 @@ class GameAdapter(var games:ArrayList<Game>, val context: Context) : RecyclerVie
                 pictureImageView.setDefaultImageResId(R.mipmap.ic_launcher)
                 pictureImageView.setErrorImageResId(R.mipmap.ic_launcher)
                 pictureImageView.setImageUrl(game.urlToImage)
+                pictureImageView.clipToOutline = true
 
             }
             gameLayout.setOnClickListener { view ->

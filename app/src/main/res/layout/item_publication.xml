@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="0dp"
+    android:layout_marginBottom="4dp"
     android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
-    android:layout_marginTop="16dp"
+    android:layout_marginTop="8dp"
     android:elevation="16dp"
     android:theme="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
     app:cardBackgroundColor="@color/colorCards"
@@ -22,14 +22,12 @@
         android:layout_height="wrap_content"
         android:background="@color/colorCards">
 
-
         <com.androidnetworking.widget.ANImageView
             android:id="@+id/avatarImagePublication"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorCards"
             android:elevation="3dp"
             android:padding="4dp"
             android:scaleType="centerCrop"
@@ -41,8 +39,9 @@
         <TextView
             android:id="@+id/titleTextViewPublication"
             android:layout_width="171dp"
-            android:layout_height="16dp"
+            android:layout_height="20dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:background="@color/colorCards"
             android:text="Mock Title text"
             android:textColor="@color/colorPrimaryText"
@@ -52,13 +51,11 @@
         <TextView
             android:id="@+id/usernameTextViewPublication"
             android:layout_width="171dp"
-            android:layout_height="16dp"
-            android:layout_marginBottom="4dp"
+            android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:background="@color/colorCards"
             android:text="Username Mock text"
             android:textColor="@color/colorDisabledText"
-            app:layout_constraintBottom_toBottomOf="@id/avatarImagePublication"
             app:layout_constraintStart_toEndOf="@+id/avatarImagePublication"
             app:layout_constraintTop_toBottomOf="@+id/titleTextViewPublication" />
 
@@ -68,8 +65,8 @@
             android:layout_height="150dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/colorCards"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/round_outline"
             android:elevation="0dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_round_perm_identity_24px"
